@@ -1,7 +1,7 @@
-import { User } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";
+import { User } from "../users/entities/User";
 
 @injectable()
 export class AuthService {
