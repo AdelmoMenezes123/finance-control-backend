@@ -1,11 +1,11 @@
 import express from "express";
 import "reflect-metadata";
 import "./containers";
-import { routes } from "./routes";
+import { authRoutes } from "./routes/authRoutes";
 
 const app = express();
 app.use(express.json());
-app.use(routes);
+app.use("/auth", authRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
