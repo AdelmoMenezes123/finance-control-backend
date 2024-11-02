@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import { NextFunction, Request, Response } from "express";
 import { container } from "tsyringe";
 import { AuthService } from "./../../modules/services/AuthService";
+
+dotenv.config();
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const authService = container.resolve(AuthService);
@@ -12,9 +15,9 @@ export const authMiddleware = (req: Request, res: Response, next: NextFunction) 
 
   try {
     const decoded = authService.verifyToken(token);
-    req["user"] = decoded;
+    req.userId = decoded.userId;
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Token inválido" });
+    return res.status(401).json({ message: "Token inválido ou expirado" });
   }
 };

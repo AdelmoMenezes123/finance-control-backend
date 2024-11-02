@@ -1,8 +1,13 @@
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";
 import { User } from "../users/entities/User";
 
+dotenv.config();
+interface JwtPayload {
+  userId: number;
+}
 @injectable()
 export class AuthService {
   private jwtSecret: string = process.env.JWT_SECRET || "default_secret";
@@ -20,15 +25,15 @@ export class AuthService {
 
   // Função para gerar o token JWT
   generateToken(user: User): string {
-    return jwt.sign({ id: user.id }, this.jwtSecret, { expiresIn: this.jwtExpiration });
+    return jwt.sign({ userId: user.id }, this.jwtSecret as string, { expiresIn: this.jwtExpiration });
   }
 
   // Função para verificar o token JWT
   verifyToken(token: string): any {
     try {
-      return jwt.verify(token, this.jwtSecret);
+      return jwt.verify(token, this.jwtSecret as string) as JwtPayload;
     } catch (error) {
-      throw new Error("Token inválido");
+      throw new Error("Token inválido ou expirado");
     }
   }
 }
