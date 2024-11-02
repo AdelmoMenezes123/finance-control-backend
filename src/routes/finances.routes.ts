@@ -4,14 +4,14 @@ import { DespesaController } from "../modules/Finances/controllers/DespesaContro
 import { ReceitaController } from "../modules/Finances/controllers/ReceitaController";
 import { authMiddleware } from "../shared/middlewares/authMiddleware";
 
-const financesRouter = Router();
+const financesRoutes = Router();
 const receitaController = new ReceitaController();
 const despesaController = new DespesaController();
 
-financesRouter.post("/receitas", authMiddleware, receitaController.create);
-financesRouter.get("/receitas", authMiddleware, receitaController.list);
+financesRoutes.post("/receitas", authMiddleware, receitaController.create);
+financesRoutes.get("/receitas", authMiddleware, receitaController.list);
 
-financesRouter.post("/despesas", authMiddleware, despesaController.create);
-financesRouter.get("/despesas", authMiddleware, despesaController.list);
+financesRoutes.post("/despesas", authMiddleware, despesaController.create);
+financesRoutes.get("/despesas", authMiddleware, despesaController.list);
 
-export { financesRouter };
+export { financesRoutes };
