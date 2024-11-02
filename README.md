@@ -87,19 +87,30 @@ Este é o backend de um sistema de controle financeiro, criado com **Node.js**, 
 
 ## Autenticação
 
-**POST /auth/register - Registra um novo usuário**
-**POST /auth/login - Realiza login e retorna um token JWT**
+**POST** /auth/register 
+   - Registra um novo usuário
+
+**POST** /auth/login 
+   - Realiza login e retorna um token JWT
 
 ## Finanças
 
-**GET /finances/receitas - Lista todas as receitas do usuário logado**
-**POST /finances/receitas - Adiciona uma nova receita**
-**GET /finances/despesas - Lista todas as despesas do usuário logado**
-**POST /finances/despesas - Adiciona uma nova despesa**
+**GET** /finances/receitas 
+   - Lista todas as receitas do usuário logado
+
+**POST** /finances/receitas 
+   - Adiciona uma nova receita
+
+**GET** /finances/despesas
+   - Lista todas as despesas do usuário logado
+
+**POST** /finances/despesas
+   - Adiciona uma nova despesa
 
 ## Usuários
 
-**GET /user - Retorna informações do usuário logado**
+**GET** /user 
+   - Retorna informações do usuário logado
 
 ### Contribuição
 
