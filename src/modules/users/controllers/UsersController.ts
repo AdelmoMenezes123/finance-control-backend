@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { z } from "zod";
 import { CreateUserService } from "../services/CreateUserService";
 import { GetUserByEmailService } from "../services/GetUserByEmailService";
+import { UserSchema } from "./../../../validations/userValidation";
 import { AuthService } from "./../../services/AuthService";
 
 export class UsersController {
@@ -13,22 +15,33 @@ export class UsersController {
 
   // Método para registrar um novo usuário
   async register(request: Request, response: Response): Promise<Response> {
-    const { email, password, nome } = request.body;
+    try {
+      // Validando dados
+      const usuarioData = UserSchema.parse(request.body);
 
-    const obterUserService = container.resolve(GetUserByEmailService);
-    const createUserService = container.resolve(CreateUserService);
+      // Obter o serviço e criar a despesa
+      const obterUserService = container.resolve(GetUserByEmailService);
+      const createUserService = container.resolve(CreateUserService);
 
-    // Verifica se o usuário já existe
-    const existingUser = await obterUserService.execute(email);
-    if (existingUser) {
-      return response.status(400).json({ message: "Email já cadastrado!" });
+      // Verifica se o usuário já existe
+      const existingUser = await obterUserService.execute(usuarioData.email);
+      if (existingUser) {
+        return response.status(400).json({ message: "Email já cadastrado!" });
+      }
+
+      // Criptografa a senha e cria o usuário
+      const hashedPassword = await this.authService.hashPassword(usuarioData.password);
+      usuarioData.password = hashedPassword;
+      const user = createUserService.execute(usuarioData);
+
+      return response.status(201).json({ user });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        const errors = error.errors.map((err) => err.message);
+        return response.status(400).json({ errors });
+      }
+      return response.status(500).json({ error: "Erro ao criar despesa" });
     }
-
-    // Criptografa a senha e cria o usuário
-    const hashedPassword = await this.authService.hashPassword(password);
-    const user = createUserService.execute({ nome, email, password: hashedPassword });
-
-    return response.status(201).json({ user });
   }
 
   // Método para login

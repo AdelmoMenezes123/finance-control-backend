@@ -3,18 +3,18 @@ import { container } from "tsyringe";
 import { z } from "zod";
 import { CreateDespesaService } from "../services/CreateDespesaService";
 import { ListDespesasService } from "../services/ListDespesasService";
-import { ReceitaSchema } from "./../../../validations/financeValidation";
+import { DespesaSchema } from "./../../../validations/financeValidation";
 
 export class DespesaController {
   async create(req: Request, res: Response): Promise<Response> {
     try {
       // Validando dados
-      req.body.userId = req["user"].id;
-      const receitaData = ReceitaSchema.parse(req.body);
+      req.body.userId = req.userId;
+      const despesaData = DespesaSchema.parse(req.body);
 
-      // Obter o serviço e criar a receita
+      // Obter o serviço e criar a despesa
       const createDespesa = container.resolve(CreateDespesaService);
-      const despesa = await createDespesa.execute(receitaData);
+      const despesa = await createDespesa.execute(despesaData);
 
       return res.status(201).json(despesa);
     } catch (error) {
@@ -24,8 +24,6 @@ export class DespesaController {
       }
       return res.status(500).json({ error: "Erro ao criar despesa" });
     }
-
-    // const { descricao, valor, data, categoria } = req.body;
   }
 
   async list(req: Request, res: Response): Promise<Response> {
