@@ -4,8 +4,11 @@ import { authRoutes } from "./routes/auth.routes";
 import { financesRoutes } from "./routes/finances.routes";
 import { secureRoutes } from "./routes/secureRputes";
 import "./shared/container";
+import { rateLimiter } from "./shared/middlewares/rateLimiter";
+
 const app = express();
 app.use(express.json());
+app.use(rateLimiter);
 // app.use(express.static("public"));
 
 app.use("/auth", authRoutes);
