@@ -1,7 +1,7 @@
 import express from "express";
 import "reflect-metadata";
 import "./containers";
-import { authRoutes } from "./routes/authRoutes";
+import { authRoutes } from "./routes/auth.routes";
 import { secureRoutes } from "./routes/secureRputes";
 
 const app = express();
