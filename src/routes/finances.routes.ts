@@ -11,10 +11,10 @@ const financesRoutes = Router();
 const receitaController = new ReceitaController();
 const despesaController = new DespesaController();
 
-financesRoutes.post("/receitas", authMiddleware, validateInput(ReceitaSchema), receitaController.create);
-financesRoutes.get("/receitas", authMiddleware, cacheMiddleware("receitas", 60), receitaController.list);
+financesRoutes.post("/receitas/create", authMiddleware, validateInput(ReceitaSchema), receitaController.create);
+financesRoutes.get("/receitas/list", authMiddleware, cacheMiddleware("receitas", 60), receitaController.list);
 
-financesRoutes.post("/despesas", authMiddleware, validateInput(DespesaSchema), despesaController.create);
-financesRoutes.get("/despesas", authMiddleware, cacheMiddleware("despesas", 60), despesaController.list);
+financesRoutes.post("/despesas/create", authMiddleware, validateInput(DespesaSchema), despesaController.create);
+financesRoutes.get("/despesas/list", authMiddleware, cacheMiddleware("despesas", 60), despesaController.list);
 
 export { financesRoutes };
