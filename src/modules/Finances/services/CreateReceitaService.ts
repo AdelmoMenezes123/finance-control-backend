@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { ICreateReceitaDTO } from "../dtos/ICreateReceitaDTO";
 import { IReceitaRepository } from "../repositories/IReceitaRepository";
+import redisClient from "./../../../config/redisClient";
 
 @injectable()
 export class CreateReceitaService {
@@ -10,6 +11,8 @@ export class CreateReceitaService {
   ) {}
 
   async execute(data: ICreateReceitaDTO): Promise<ICreateReceitaDTO> {
-    return await this.receitaRepository.create(data);
+    const receita = await this.receitaRepository.create(data);
+    await redisClient.del("receitas"); // Limpa o cache de receitas ao adicionar nova entrada
+    return receita;
   }
 }
